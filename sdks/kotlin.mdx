@@ -1,0 +1,40 @@
+---
+title: "Kotlin"
+description: "Send notifications from Kotlin and JVM applications."
+icon: "java"
+---
+
+## Installation
+
+Add the dependency to your `build.gradle.kts`:
+
+```kotlin
+dependencies {
+    implementation("com.apialerts:apialerts-kotlin:1.0.0")
+}
+```
+
+## Usage
+
+```kotlin
+import com.apialerts.ApiAlerts
+
+val client = ApiAlerts("YOUR-API-KEY")
+
+// Simple notification
+client.send(message = "Deployment successful")
+
+// With all options
+client.send(
+    message = "New user signed up",
+    channel = "developers",
+    link = "https://dashboard.example.com/users/123",
+    tags = listOf("signup", "organic"),
+)
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-kotlin">
+  Full documentation, examples, and source code.
+</Card>

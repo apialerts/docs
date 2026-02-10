@@ -1,0 +1,36 @@
+---
+title: "C#"
+description: "Send notifications from C# and .NET applications."
+icon: "hashtag"
+---
+
+## Installation
+
+```bash
+dotnet add package ApiAlerts
+```
+
+## Usage
+
+```csharp
+using ApiAlerts;
+
+var client = new ApiAlertsClient("YOUR-API-KEY");
+
+// Simple notification
+await client.Send(message: "Deployment successful");
+
+// With all options
+await client.Send(
+    message: "New user signed up",
+    channel: "developers",
+    link: "https://dashboard.example.com/users/123",
+    tags: new[] { "signup", "organic" }
+);
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-csharp">
+  Full documentation, examples, and source code.
+</Card>

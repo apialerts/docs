@@ -1,0 +1,98 @@
+---
+title: "Connect Any Platform"
+description: "Send notifications from any platform that supports outgoing webhooks."
+icon: "webhook"
+---
+
+Most developer tools — analytics platforms, payment processors, CI/CD services, monitoring tools — support outgoing webhooks. You can point them directly at the API Alerts endpoint to receive notifications without writing any code.
+
+## The Pattern
+
+Configure your platform's outgoing webhook with:
+
+| Setting | Value |
+| --- | --- |
+| **URL** | `https://api.apialerts.com/event` |
+| **Method** | `POST` |
+| **Headers** | `Authorization: Bearer YOUR-API-KEY` |
+| | `Content-Type: application/json` |
+
+**Body:**
+
+```json
+{
+  "message": "Your notification message",
+  "channel": "your-channel",
+  "tags": ["webhook"]
+}
+```
+
+Most platforms let you customize the payload using template variables. Use them to include relevant details like event names, user IDs, or amounts in your message.
+
+## Platform Recipes
+
+Step-by-step setup for popular platforms.
+
+### PostHog
+
+PostHog can forward events to API Alerts using its webhook destination.
+
+1. Go to **Data pipelines** > **Destinations** > **New destination**
+2. Select **Webhook**
+3. Configure:
+   - **URL**: `https://api.apialerts.com/event`
+   - **Method**: `POST`
+   - **Headers**:
+     ```
+     Authorization: Bearer YOUR-API-KEY
+     Content-Type: application/json
+     ```
+   - **Body**:
+     ```json
+     {
+       "message": "PostHog event: {event.event}",
+       "channel": "analytics",
+       "tags": ["posthog"]
+     }
+     ```
+4. Choose which PostHog events trigger the webhook
+5. Save and test
+
+### Stripe
+
+Stripe webhooks can notify you of payments, subscriptions, and disputes.
+
+1. Go to **Developers** > **Webhooks** > **Add endpoint**
+2. You'll need a small relay service since Stripe sends its own payload format. The simplest approach:
+   - Use a [Zapier](/integrations/zapier) Zap with Stripe as the trigger and API Alerts as the action
+   - Or write a small serverless function that transforms the Stripe payload and forwards it
+
+<Tip>
+If a platform sends its own payload format that doesn't match the API Alerts request body, you can use [Zapier](/integrations/zapier) as a bridge — set the platform as the trigger and API Alerts as the action.
+</Tip>
+
+### Sentry
+
+Sentry can send alerts to API Alerts when errors occur.
+
+1. Go to **Settings** > **Integrations** > **WebHooks**
+2. Enable the webhook integration
+3. Add a webhook URL — Sentry uses its own format, so use a Zapier Zap or a small relay:
+   - Zapier: Sentry trigger > API Alerts action
+   - Or: a serverless function that maps `event.title` to `message`
+
+### Generic Setup
+
+For any platform not listed above:
+
+1. Look for **Webhooks**, **Notifications**, **Integrations**, or **Data pipelines** in the platform's settings
+2. Add a new webhook with the URL `https://api.apialerts.com/event`
+3. Set the `Authorization` and `Content-Type` headers
+4. Map the platform's template variables into the JSON body
+5. Test the webhook
+
+If the platform doesn't support custom headers (some only allow a URL), use [Zapier](/integrations/zapier) as an intermediary.
+
+## Missing a Platform?
+
+We're working on native integrations for popular platforms. See the [roadmap](/roadmap) for what's coming. If you'd like to see a specific platform supported, submit a [feature request](https://forms.gle/f7hpCZmhdvATY6n98).

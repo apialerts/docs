@@ -1,0 +1,76 @@
+---
+title: "GitHub Actions"
+description: "Send notifications from your CI/CD workflows."
+icon: "github"
+---
+
+Send API Alerts notifications directly from your GitHub Actions workflows. Get notified on deployments, test results, releases, and more.
+
+## Usage
+
+```yaml
+- name: Send Notification
+  uses: apialerts/notify-action@v2
+  with:
+    api_key: ${{ secrets.API_ALERTS_KEY }}
+    message: "Deployment successful"
+```
+
+## Inputs
+
+| Input | Required | Description |
+| --- | --- | --- |
+| `api_key` | Yes | Your API Alerts workspace API key |
+| `message` | Yes | The notification message |
+| `channel` | No | Target channel (defaults to workspace default) |
+| `link` | No | URL to attach to the notification |
+| `tags` | No | Comma-separated tags for categorization |
+
+## Examples
+
+### Deployment notification
+
+```yaml
+name: Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # ... your deploy steps ...
+      - name: Notify
+        uses: apialerts/notify-action@v2
+        with:
+          api_key: ${{ secrets.API_ALERTS_KEY }}
+          message: "Deployed ${{ github.sha }} to production"
+          channel: "deployments"
+          link: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          tags: "deploy,production"
+```
+
+### Test failure notification
+
+```yaml
+- name: Notify on failure
+  if: failure()
+  uses: apialerts/notify-action@v2
+  with:
+    api_key: ${{ secrets.API_ALERTS_KEY }}
+    message: "Tests failed on ${{ github.ref_name }}"
+    channel: "ci"
+    tags: "tests,failure"
+```
+
+## Resources
+
+<Card title="GitHub Marketplace" icon="github" href="https://github.com/marketplace/actions/api-alerts-github-action-notify">
+  View on GitHub Marketplace.
+</Card>
+
+<Card title="Source Code" icon="code" href="https://github.com/apialerts/notify-action">
+  Full source code and documentation.
+</Card>

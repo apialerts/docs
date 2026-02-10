@@ -1,0 +1,36 @@
+---
+title: "Python"
+description: "Send notifications from Python applications."
+icon: "python"
+---
+
+## Installation
+
+```bash
+pip install apialerts-python
+```
+
+## Usage
+
+```python
+from apialerts import ApiAlerts
+
+client = ApiAlerts('YOUR-API-KEY')
+
+# Simple notification
+client.send(message='Deployment successful')
+
+# With all options
+client.send(
+    message='New user signed up',
+    channel='developers',
+    link='https://dashboard.example.com/users/123',
+    tags=['signup', 'organic'],
+)
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-python">
+  Full documentation, examples, and source code.
+</Card>

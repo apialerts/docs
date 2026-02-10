@@ -1,0 +1,153 @@
+openapi: 3.1.0
+info:
+  title: API Alerts
+  description: |
+    Public API for the API Alerts notification routing service.
+
+    Send events via API and receive push notifications on mobile devices.
+    Events are delivered to workspace channels and can be routed to external
+    destinations like Slack, Discord, and webhooks.
+
+    ## Authentication
+    All requests require an API key passed in the `Authorization` header.
+    API keys are scoped to a workspace and can be created in the dashboard.
+  version: "1.0"
+  contact:
+    name: API Alerts
+    url: https://apialerts.com
+servers:
+  - url: https://api.apialerts.com
+    description: Production
+tags:
+  - name: Events
+    description: Submit and manage event notifications.
+paths:
+  /event:
+    post:
+      operationId: submitEvent
+      tags:
+        - Events
+      summary: Submit an event
+      description: |
+        Send an event notification to a workspace channel. The event will be
+        delivered as a push notification to all team members assigned to the
+        target channel. If routers are configured, the event may also be
+        forwarded to external destinations based on the event name.
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventRequest"
+            example:
+              event: "user.signup"
+              channel: "developers"
+              message: "New user signed up"
+              link: "https://dashboard.example.com/users/123"
+              tags:
+                - signup
+                - organic
+      responses:
+        "200":
+          description: Event submitted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventSaveResponse"
+              example:
+                workspace: My Workspace
+                channel: developers
+                uuid: 550e8400-e29b-41d4-a716-446655440000
+                remainingQuota: 4832
+        "400":
+          description: Invalid request body or validation error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                message: "Validation failed"
+        "401":
+          description: Invalid or missing API key.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                message: "Unauthorized"
+components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      description: Workspace API key. Found in the workspace settings page of the dashboard.
+  schemas:
+    EventRequest:
+      type: object
+      description: The event payload to submit.
+      properties:
+        event:
+          type: ["string", "null"]
+          description: |
+            The event name identifier. Used by routers to match and forward
+            events to external destinations (e.g. "user.signup", "payment.failed").
+        channel:
+          type: ["string", "null"]
+          description: |
+            The channel to deliver the event to. If omitted, the workspace
+            default channel is used. Channel must exist in the workspace.
+        title:
+          type: ["string", "null"]
+          description: A custom title for the push notification. Overrides the default event name display.
+        message:
+          type: string
+          description: The notification message body. This is the main content shown in push notifications.
+        link:
+          type: ["string", "null"]
+          description: A URL to attach to the event. Tapping the notification on mobile will open this link.
+          format: uri
+        tags:
+          type: ["array", "null"]
+          items:
+            type: string
+          description: Tags for categorizing and filtering events.
+        data:
+          type: ["object", "null"]
+          description: Arbitrary JSON payload attached to the event. Useful for router destinations that forward structured data.
+      required:
+        - message
+    EventSaveResponse:
+      type: object
+      description: Confirmation of a successfully submitted event.
+      properties:
+        workspace:
+          type: ["string", "null"]
+          description: Workspace name the event was delivered to.
+        channel:
+          type: ["string", "null"]
+          description: Channel name the event was delivered to.
+        uuid:
+          type: ["string", "null"]
+          description: Unique event identifier (UUID v4).
+          format: uuid
+        remainingQuota:
+          type: ["integer", "null"]
+          description: Remaining event quota in the current billing period.
+          format: int64
+        error:
+          type: ["string", "null"]
+          description: A warning or non-fatal error message, if any.
+        errors:
+          type: ["array", "null"]
+          description: List of validation warnings (e.g. message too long, invalid URL, tags format).
+          items:
+            type: string
+    ErrorResponse:
+      type: object
+      description: Error response returned for failed requests.
+      properties:
+        message:
+          type: ["string", "null"]
+          description: Human-readable error message.

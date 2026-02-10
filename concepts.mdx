@@ -1,0 +1,81 @@
+---
+title: "Concepts"
+description: "Core concepts and terminology in API Alerts."
+---
+
+## Workspaces
+
+A **workspace** is your team or organization container. Everything in API Alerts is scoped to a workspace: channels, API keys, team members, and events.
+
+- Each workspace has its own API keys, event quota, and team
+- You can create multiple workspaces to separate projects or environments
+- Workspaces are created in the [dashboard](https://apialerts.com/app) or mobile app
+
+## Channels
+
+A **channel** is an internal grouping that controls who on your team sees which events. Think of them like Slack channels for your notifications.
+
+- Events are sent to a channel: `"channel": "deployments"`
+- Team members are assigned to channels so they only see relevant events
+- If no channel is specified, events go to the workspace's default channel
+- Use channels to segment notifications (e.g., "payments", "deployments", "errors")
+
+## Events
+
+An **event** is a notification sent to your workspace via the API. When an event is submitted:
+
+1. It's delivered to the specified channel (or the default channel)
+2. All team members assigned to that channel receive a push notification
+3. The event appears in the event feed in the dashboard and mobile app
+
+Events have the following properties:
+
+| Property | Required | Description |
+| --- | --- | --- |
+| `message` | Yes | The notification body text |
+| `channel` | No | Target channel (defaults to workspace default) |
+| `event` | No | Event name identifier for routing (e.g., `user.signup`) |
+| `title` | No | Custom notification title |
+| `link` | No | URL that opens when tapping the notification |
+| `tags` | No | Tags for categorization and filtering |
+| `data` | No | Arbitrary JSON payload |
+
+## API Keys
+
+API keys authenticate requests to the API Alerts service. They are scoped to a workspace — each key can only send events to the workspace it belongs to.
+
+- Created and managed by workspace admins in the [dashboard](https://apialerts.com/app)
+- Passed as a Bearer token in the `Authorization` header
+- Each workspace can have up to 10 API keys (varies by plan)
+- Keys are shown once on creation — store them securely
+
+```bash
+Authorization: Bearer YOUR-API-KEY
+```
+
+See the [API Reference](/api-reference/introduction) for usage details.
+
+## Team Roles
+
+Workspace members are assigned one of three roles:
+
+| Role | Permissions |
+| --- | --- |
+| **Admin** | Full access. Manage workspace settings, team members, channels, API keys. View subscription. |
+| **Member** | Read-only access to team, API keys, and channels. Can leave workspace and channels. |
+| **Viewer** | View dashboard and joined channels only. Can leave channels. |
+
+The workspace **owner** is always an admin and has additional permissions: managing the subscription and deleting the workspace.
+
+## Plans
+
+API Alerts offers tiered plans based on your usage needs:
+
+| Plan | Price | Events / Month | Team Members | Channels | Event History | Extras |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Free** | $0 | 500 | 1 | 5 | 90 days | All integrations |
+| **Indie** | $12/mo | 2,000 | 1 | 15 | 180 days | All integrations |
+| **Startup** | $30/mo | 20,000 | 10 | 50 | Unlimited | All integrations, analytics & reporting |
+| **Team** | $90/mo | 100,000 | 50 | 200 | Unlimited | All integrations, analytics & reporting, priority support |
+
+Get 2 months free with yearly billing. All plans include push notifications, the mobile app, and the web dashboard. See [pricing](https://apialerts.com/pricing) for current prices. Larger plans are available on request — contact [support@apialerts.com](mailto:support@apialerts.com).

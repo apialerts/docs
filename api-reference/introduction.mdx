@@ -1,33 +1,51 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "API Reference"
+description: "Direct HTTP integration with the API Alerts service."
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+The API Alerts REST API enables direct integration with our notification service. While we recommend using our [SDKs](/sdks/javascript) for most use cases, the API is available for custom implementations.
 
-## Welcome
+## Base URL
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+https://api.apialerts.com
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All requests require a workspace API key passed as a Bearer token in the `Authorization` header.
+
+```bash
+Authorization: Bearer YOUR-API-KEY
+```
+
+API keys are scoped to a workspace and can be created in the [dashboard](https://apialerts.com).
+
+## Request Headers
+
+```
+Authorization: Bearer YOUR-API-KEY
+Content-Type: application/json
+```
+
+## Endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | [`/event`](/api-reference/endpoint/create) | Submit an event notification |
+
+## Error Responses
+
+All error responses follow this format:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "message": "Error description"
+}
 ```
+
+| Status | Description |
+| --- | --- |
+| 400 | Invalid request body or validation error |
+| 401 | Invalid or missing API key |
+| 429 | Rate limit exceeded (resets weekly on Sunday 11:59 PM UTC) |

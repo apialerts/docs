@@ -1,0 +1,38 @@
+---
+title: "Swift"
+description: "Send notifications from Swift and iOS/macOS applications."
+icon: "swift"
+---
+
+## Installation
+
+Add the package via Swift Package Manager:
+
+```
+https://github.com/apialerts/apialerts-swift
+```
+
+## Usage
+
+```swift
+import ApiAlerts
+
+let client = ApiAlerts("YOUR-API-KEY")
+
+// Simple notification
+client.send(message: "Deployment successful")
+
+// With all options
+client.send(
+    message: "New user signed up",
+    channel: "developers",
+    link: "https://dashboard.example.com/users/123",
+    tags: ["signup", "organic"]
+)
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-swift">
+  Full documentation, examples, and source code.
+</Card>

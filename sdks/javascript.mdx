@@ -1,0 +1,36 @@
+---
+title: "JavaScript"
+description: "Send notifications from Node.js and JavaScript applications."
+icon: "js"
+---
+
+## Installation
+
+```bash
+npm install apialerts-js
+```
+
+## Usage
+
+```javascript
+import { ApiAlerts } from 'apialerts-js';
+
+const client = new ApiAlerts('YOUR-API-KEY');
+
+// Simple notification
+await client.send({ message: 'Deployment successful' });
+
+// With all options
+await client.send({
+  message: 'New user signed up',
+  channel: 'developers',
+  link: 'https://dashboard.example.com/users/123',
+  tags: ['signup', 'organic'],
+});
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-js">
+  Full documentation, examples, and source code.
+</Card>

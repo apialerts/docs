@@ -1,0 +1,39 @@
+---
+title: "Rust"
+description: "Send notifications from Rust applications."
+icon: "rust"
+---
+
+## Installation
+
+Add to your `Cargo.toml`:
+
+```toml
+[dependencies]
+apialerts = "1.0"
+```
+
+## Usage
+
+```rust
+use apialerts::ApiAlerts;
+
+let client = ApiAlerts::new("YOUR-API-KEY");
+
+// Simple notification
+client.send("Deployment successful").await;
+
+// With all options
+client.send_event(Event {
+    message: "New user signed up".to_string(),
+    channel: Some("developers".to_string()),
+    link: Some("https://dashboard.example.com/users/123".to_string()),
+    tags: Some(vec!["signup".to_string(), "organic".to_string()]),
+}).await;
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-rust">
+  Full documentation, examples, and source code.
+</Card>

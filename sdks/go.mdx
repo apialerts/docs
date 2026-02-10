@@ -1,0 +1,42 @@
+---
+title: "Go"
+description: "Send notifications from Go applications."
+icon: "golang"
+---
+
+## Installation
+
+```bash
+go get github.com/apialerts/apialerts-go
+```
+
+## Usage
+
+```go
+package main
+
+import "github.com/apialerts/apialerts-go"
+
+func main() {
+    client := apialerts.New("YOUR-API-KEY")
+
+    // Simple notification
+    client.Send(apialerts.Event{
+        Message: "Deployment successful",
+    })
+
+    // With all options
+    client.Send(apialerts.Event{
+        Message: "New user signed up",
+        Channel: "developers",
+        Link:    "https://dashboard.example.com/users/123",
+        Tags:    []string{"signup", "organic"},
+    })
+}
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-go">
+  Full documentation, examples, and source code.
+</Card>
