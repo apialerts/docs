@@ -1,0 +1,97 @@
+---
+title: "CLI"
+description: "Send notifications from your terminal, scripts, and CI/CD pipelines."
+icon: "terminal"
+---
+
+A command-line interface for API Alerts. Send events from your terminal, shell scripts, cron jobs, and CI/CD pipelines.
+
+## Installation
+
+<Tabs>
+  <Tab title="Homebrew">
+    ```bash
+    brew tap apialerts/tap
+    brew install --cask apialerts
+    ```
+  </Tab>
+  <Tab title="Scoop">
+    ```bash
+    scoop bucket add apialerts https://github.com/apialerts/scoop-bucket
+    scoop install apialerts
+    ```
+  </Tab>
+  <Tab title="Go">
+    ```bash
+    go install github.com/apialerts/apialerts-cli@latest
+    ```
+  </Tab>
+  <Tab title="Binary">
+    Download the latest binary from the [Releases](https://github.com/apialerts/apialerts-cli/releases) page.
+  </Tab>
+</Tabs>
+
+## Setup
+
+Configure your API key once. The key is stored in `~/.apialerts/config.json`.
+
+```bash
+apialerts config --key YOUR_API_KEY
+```
+
+Verify your configuration:
+
+```bash
+apialerts config
+```
+
+## Usage
+
+```bash
+# Simple notification
+apialerts send -m "Deployment successful"
+
+# With all options
+apialerts send -e user.purchase -t "New Sale" -m "$49.99 from john@example.com" -c payments -g billing,sales -l https://dashboard.example.com
+```
+
+## Flags
+
+| Flag | Short | Description |
+| --- | --- | --- |
+| `--message` | `-m` | Event message (required) |
+| `--event` | `-e` | Event name for routing |
+| `--title` | `-t` | Event title |
+| `--channel` | `-c` | Target channel (defaults to workspace default) |
+| `--tags` | `-g` | Comma-separated tags |
+| `--link` | `-l` | Associated URL |
+| `--key` | | API key override for a single request |
+
+## Examples
+
+### Shell script
+
+```bash
+#!/bin/bash
+apialerts send -m "Backup completed" -c ops -g backup,cron
+```
+
+### CI/CD pipeline
+
+```bash
+apialerts send -m "Build passed" -l https://ci.example.com/build/123 --key $APIALERTS_API_KEY
+```
+
+### Test your API key
+
+Send a test event to verify your API key and connection. This sends a real event to your workspace so you can confirm everything is working.
+
+```bash
+apialerts test
+```
+
+## Resources
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/apialerts/apialerts-cli">
+  Full documentation, examples, and source code.
+</Card>

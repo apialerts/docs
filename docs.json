@@ -36,6 +36,9 @@
           {
             "group": "Integrations",
             "pages": [
+              "integrations/curl",
+              "integrations/cli",
+              "integrations/ai-agents",
               "integrations/webhooks",
               "integrations/github-actions",
               "integrations/zapier"

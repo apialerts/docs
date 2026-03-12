@@ -1,0 +1,83 @@
+---
+title: "cURL / HTTP"
+description: "Send notifications from anywhere using cURL or any HTTP client."
+icon: "code"
+---
+
+No SDK or CLI needed. Any tool that can make an HTTP request can send notifications to API Alerts.
+
+## Basic Request
+
+```bash
+curl -X POST https://api.apialerts.com/event \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "message": "Hello from API Alerts!" }'
+```
+
+## With All Options
+
+```bash
+curl -X POST https://api.apialerts.com/event \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "New user signed up",
+    "channel": "signups",
+    "link": "https://dashboard.example.com/users/123",
+    "tags": ["signup", "organic"]
+  }'
+```
+
+## Request Body
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `message` | Yes | The notification message |
+| `channel` | No | Target channel (defaults to workspace default) |
+| `link` | No | URL to attach to the notification |
+| `tags` | No | Array of tags for categorization |
+
+## Examples
+
+### Shell script
+
+```bash
+#!/bin/bash
+curl -s -X POST https://api.apialerts.com/event \
+  -H "Authorization: Bearer $APIALERTS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{ \"message\": \"Backup completed\", \"tags\": [\"backup\", \"cron\"] }"
+```
+
+### Cron job
+
+```bash
+# Notify every hour that a health check passed
+0 * * * * curl -s -X POST https://api.apialerts.com/event -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{ "message": "Health check OK" }'
+```
+
+### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri "https://api.apialerts.com/event" `
+  -Method Post `
+  -Headers @{ "Authorization" = "Bearer YOUR_API_KEY"; "Content-Type" = "application/json" } `
+  -Body '{ "message": "Deploy completed" }'
+```
+
+### Python (no SDK)
+
+```python
+import requests
+
+requests.post("https://api.apialerts.com/event",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+    json={"message": "Task finished"})
+```
+
+## Resources
+
+<Card title="API Reference" icon="terminal" href="/api-reference/introduction">
+  Full API documentation with all endpoints and error codes.
+</Card>

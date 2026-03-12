@@ -1,0 +1,121 @@
+---
+title: "AI Agents"
+description: "Get notified when AI coding agents complete tasks, run commands, or need attention."
+icon: "robot"
+---
+
+Use API Alerts with AI coding agents to stay informed about what your agents are doing — get notified when tasks complete, commands run, or something fails.
+
+## Claude Code
+
+[Claude Code](https://claude.ai/code) supports hooks that run shell commands on specific events. Pair this with the API Alerts CLI to get push notifications straight to your phone.
+
+### Install the CLI
+
+<Tabs>
+  <Tab title="Homebrew">
+    ```bash
+    brew tap apialerts/tap
+    brew install --cask apialerts
+    apialerts config --key YOUR_API_KEY
+    ```
+  </Tab>
+  <Tab title="Scoop">
+    ```bash
+    scoop bucket add apialerts https://github.com/apialerts/scoop-bucket
+    scoop install apialerts
+    apialerts config --key YOUR_API_KEY
+    ```
+  </Tab>
+</Tabs>
+
+### Notify when Claude finishes a task
+
+Add to `.claude/settings.json` in your project:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "apialerts send -m 'Claude Code finished a task' -c ai -g claude,done"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Notify on every bash command
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "apialerts send -m 'Claude ran a command' -c ai -g claude,bash"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Notify when Claude needs attention
+
+```json
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "apialerts send -m 'Claude Code needs your attention' -c ai -g claude,attention"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Other AI Agents
+
+Any AI agent or automation that can run shell commands can use the CLI or cURL to send notifications.
+
+### CLI
+
+```bash
+apialerts send -m "Agent completed task" -c ai
+```
+
+### cURL
+
+```bash
+curl -X POST https://api.apialerts.com/event \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "message": "Agent completed task", "channel": "ai" }'
+```
+
+## Resources
+
+<Card title="CLI Installation" icon="terminal" href="/integrations/cli">
+  Full CLI documentation and setup guide.
+</Card>
+
+<Card title="cURL / HTTP" icon="code" href="/integrations/curl">
+  Use the REST API directly from any agent or script.
+</Card>
