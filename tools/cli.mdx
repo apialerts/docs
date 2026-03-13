@@ -76,12 +76,6 @@ apialerts send -e user.purchase -t "New Sale" -m "$49.99 from john@example.com" 
 apialerts send -m "Backup completed" -c ops -g backup,cron
 ```
 
-### CI/CD pipeline
-
-```bash
-apialerts send -m "Build passed" -l https://ci.example.com/build/123 --key $APIALERTS_API_KEY
-```
-
 ### Test your API key
 
 Send a test event to verify your API key and connection. This sends a real event to your workspace so you can confirm everything is working.
@@ -89,6 +83,19 @@ Send a test event to verify your API key and connection. This sends a real event
 ```bash
 apialerts test
 ```
+
+## CI/CD Pipelines
+
+The CLI currently supports macOS and Windows. For Linux-based CI/CD pipelines, use cURL or the GitHub Actions integration instead.
+
+<CardGroup cols={2}>
+  <Card title="GitHub Actions" icon="github" href="/integrations/github-actions">
+    Native GitHub Actions integration for your workflows.
+  </Card>
+  <Card title="cURL / HTTP" icon="code" href="/tools/curl">
+    Send notifications from any Linux environment with a one-liner.
+  </Card>
+</CardGroup>
 
 ## Resources
 

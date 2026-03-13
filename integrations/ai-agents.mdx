@@ -1,16 +1,14 @@
 ---
 title: "AI Agents"
-description: "Get notified when AI coding agents complete tasks, run commands, or need attention."
+description: "Get notified on your phone when AI agents finish long-running tasks."
 icon: "robot"
 ---
 
-Use API Alerts with AI coding agents to stay informed about what your agents are doing — get notified when tasks complete, commands run, or something fails.
+Step away from your desk while Claude Code works. When the task is done, you'll get a push notification on your phone.
 
 ## Claude Code
 
-[Claude Code](https://claude.ai/code) supports hooks that run shell commands on specific events. Pair this with the API Alerts CLI to get push notifications straight to your phone.
-
-### Install the CLI
+Install the API Alerts CLI and configure your API key once:
 
 <Tabs>
   <Tab title="Homebrew">
@@ -29,7 +27,23 @@ Use API Alerts with AI coding agents to stay informed about what your agents are
   </Tab>
 </Tabs>
 
-### Notify when Claude finishes a task
+### Ask Claude to notify you
+
+Because the CLI is installed on your machine, Claude Code can run it directly as part of any task. Just ask:
+
+> *"Refactor the authentication module and send me an API Alert when you're done."*
+
+> *"Run the full test suite and notify me via API Alerts with a summary of the results."*
+
+> *"Migrate the database schema and send me an apialert if anything fails."*
+
+Claude will run `apialerts send` at the right moment — no configuration needed beyond installing the CLI.
+
+### Automate with hooks
+
+For hands-free notifications on every task, use Claude Code hooks to fire alerts automatically without having to ask each time.
+
+**Notify when Claude finishes a task**
 
 Add to `.claude/settings.json` in your project:
 
@@ -51,27 +65,7 @@ Add to `.claude/settings.json` in your project:
 }
 ```
 
-### Notify on every bash command
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "apialerts send -m 'Claude ran a command' -c ai -g claude,bash"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-### Notify when Claude needs attention
+**Notify when Claude needs your attention**
 
 ```json
 {
@@ -93,15 +87,13 @@ Add to `.claude/settings.json` in your project:
 
 ## Other AI Agents
 
-Any AI agent or automation that can run shell commands can use the CLI or cURL to send notifications.
-
-### CLI
+Any agent that can run shell commands can send notifications the same way.
 
 ```bash
 apialerts send -m "Agent completed task" -c ai
 ```
 
-### cURL
+Or via cURL for agents without CLI access:
 
 ```bash
 curl -X POST https://api.apialerts.com/event \
@@ -112,10 +104,11 @@ curl -X POST https://api.apialerts.com/event \
 
 ## Resources
 
-<Card title="CLI Installation" icon="terminal" href="/integrations/cli">
-  Full CLI documentation and setup guide.
-</Card>
-
-<Card title="cURL / HTTP" icon="code" href="/integrations/curl">
-  Use the REST API directly from any agent or script.
-</Card>
+<CardGroup cols={2}>
+  <Card title="CLI Installation" icon="terminal" href="/tools/cli">
+    Full CLI documentation and setup guide.
+  </Card>
+  <Card title="cURL / HTTP" icon="code" href="/tools/curl">
+    Use the REST API directly from any agent or script.
+  </Card>
+</CardGroup>

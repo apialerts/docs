@@ -8,6 +8,7 @@
     "dark": "#E06C00"
   },
   "favicon": "/favicon.svg",
+  "openapi": "/api-reference/openapi.yaml",
   "navigation": {
     "tabs": [
       {
@@ -34,10 +35,15 @@
             ]
           },
           {
+            "group": "Tools",
+            "pages": [
+              "tools/curl",
+              "tools/cli"
+            ]
+          },
+          {
             "group": "Integrations",
             "pages": [
-              "integrations/curl",
-              "integrations/cli",
               "integrations/ai-agents",
               "integrations/webhooks",
               "integrations/github-actions",
@@ -66,6 +72,12 @@
             "group": "Endpoints",
             "pages": [
               "api-reference/endpoint/create"
+            ]
+          },
+          {
+            "group": "Testing",
+            "pages": [
+              "integrations/postman"
             ]
           }
         ]

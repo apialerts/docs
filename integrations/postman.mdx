@@ -1,0 +1,87 @@
+---
+title: "Postman"
+description: "Test and explore the API Alerts API using Postman."
+icon: "rectangle-terminal"
+---
+
+Postman is a great way to explore and test the API Alerts API before integrating it into your application.
+
+## Import via OpenAPI
+
+The fastest way to get started is to import the API Alerts OpenAPI spec directly into Postman.
+
+**Option 1 — Import from URL**
+
+1. Open Postman and click **Import**
+2. Select the **Link** tab
+3. Paste the following URL and click **Continue**:
+
+```
+https://api.apialerts.com/swagger
+```
+
+**Option 2 — Import the spec file**
+
+Download the OpenAPI spec and import it as a file:
+
+1. Open Postman and click **Import**
+2. Select the **File** tab
+3. Upload the `openapi.yaml` file
+
+Once imported, Postman will create a collection with all available endpoints pre-configured.
+
+## Set Up Authentication
+
+After importing, configure your API key so every request is authenticated automatically.
+
+1. Open the imported **API Alerts** collection
+2. Go to the **Variables** tab
+3. Set the `baseUrl` variable to `https://api.apialerts.com`
+4. Go to the **Authorization** tab
+5. Set the type to **Bearer Token**
+6. Enter your API key from the [dashboard](https://apialerts.com/app)
+
+Now all requests in the collection will use your API key automatically.
+
+## Send Your First Event
+
+1. Open the **Submit Event** request (`POST /event`)
+2. Go to the **Body** tab — it should already be set to **raw / JSON**
+3. Enter a payload:
+
+Only `message` is required. All other fields are optional.
+
+```json
+{
+  "message": "Hello from Postman!",
+  "event": "test.event",
+  "channel": "developers",
+  "title": "Test Notification",
+  "link": "https://example.com",
+  "tags": ["test"]
+}
+```
+
+4. Click **Send**
+
+A successful response looks like:
+
+```json
+{
+  "workspace": "My Workspace",
+  "channel": "developers",
+  "uuid": "550e8400-e29b-41d4-a716-446655440000",
+  "remainingQuota": 4832
+}
+```
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card title="OpenAPI / Swagger" icon="webhook" href="https://api.apialerts.com/swagger">
+    Explore the live interactive API spec.
+  </Card>
+  <Card title="API Reference" icon="terminal" href="/api-reference/introduction">
+    Full endpoint documentation with all fields and error codes.
+  </Card>
+</CardGroup>
